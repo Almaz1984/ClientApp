@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">ClientApp</string>
+    <string name="latitude">Широта %.6f</string>
+    <string name="longitude">Долгота %.6f</string>
+    <string name="settings_title">Доступ к местоположению запрещен…</string>
+    <string name="settings_text">Приложению требуется доступ к камере для фотографирования.\nПожалуйста, предоставьте доступ в меню настроек.</string>
+    <string name="settings_button_text">Настройки</string>
+    <string name="rationale_title">Разрешить доступ к местоположению?</string>
+    <string name="rationale_text">Приложению требуется доступ для определения местоположения.\nВы сможете отозвать доступ через меню настроек в любой момент.</string>
+    <string name="rationale_button_text">Разрешить</string>
+    <string name="error_text">Не удалось получить данные</string>
 </resources>
