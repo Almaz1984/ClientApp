@@ -9,6 +9,8 @@ import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast.LENGTH_SHORT
 import android.widget.Toast.makeText
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
@@ -28,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by viewBinding()
 
     private val viewModel: MainViewModel by viewModel()
+    private var settingsLauncher: ActivityResultLauncher<Intent>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +38,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setupFragmentListeners()
+
+        settingsLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                viewModel.handleAction(MainAction.RequestCheckPermission)
+            }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -112,7 +120,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.setFragmentResultListener(RATIONALE_KEY, this) { _, bundle ->
             val isWantToAllowAfterRationale = bundle.getBoolean(RESULT_KEY)
             if (isWantToAllowAfterRationale) {
-                viewModel.handleAction(MainAction.CheckPermission)
+                viewModel.handleAction(MainAction.RequestCheckPermission)
             }
         }
 
@@ -128,8 +136,8 @@ class MainActivity : AppCompatActivity() {
         val intent =
             Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                 .setData(Uri.fromParts(SETTINGS_SCHEME, this.packageName, null))
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
+        settingsLauncher?.launch(intent)
+        viewModel.handleAction(MainAction.SettingsShown)
     }
 
     private fun checkLocationPermissions() {

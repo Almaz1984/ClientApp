@@ -27,7 +27,7 @@ class MainViewModelTest {
 
     @Test
     fun `should change state to CheckPermission when CheckPermission action is handled`() {
-        viewModel.handleAction(MainAction.CheckPermission)
+        viewModel.handleAction(MainAction.RequestCheckPermission)
 
         assertEquals(MainState.CheckPermission, viewModel.state.value)
     }

@@ -3,6 +3,8 @@ package com.example.clientapp.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.clientapp.domain.LocationRepository
+import com.example.clientapp.ui.MainState.CheckPermission
+import com.example.clientapp.ui.MainState.GoToSettings
 import com.example.clientapp.ui.MainState.Idle
 import com.example.clientapp.ui.MainState.Loading
 import kotlinx.coroutines.CancellationException
@@ -18,14 +20,15 @@ class MainViewModel(
         get() = _state
 
     init {
-        handleAction(MainAction.CheckPermission)
+        handleAction(MainAction.RequestCheckPermission)
     }
 
     fun handleAction(action: MainAction) {
         when (action) {
-            is MainAction.RequestLocation -> getLocation()
-            is MainAction.CheckPermission -> _state.value = MainState.CheckPermission
-            is MainAction.SettingsClicked -> _state.value = MainState.GoToSettings
+            MainAction.RequestLocation -> getLocation()
+            MainAction.RequestCheckPermission -> _state.value = CheckPermission
+            MainAction.SettingsClicked -> _state.value = GoToSettings
+            MainAction.SettingsShown -> _state.value = Idle
         }
     }
 
